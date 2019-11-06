@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-      <h1>Parent: {{ carName }}</h1>
-
+      <h1 v-colored:background="'green'" v-colored:color="'white'" v-if="visible">Parent: {{ carName }}</h1>
+      <h1 v-colored:color="'green'" v-if="visible">Parent: {{ carName }}</h1>
+      <button @click="visible = !visible">toggle</button>
 
       <app-car
         :carName="carName"
@@ -27,7 +28,7 @@ export default {
     return {
       carName: 'Ford',
       carYear: 2018,
-
+      visible: true
     }
   },
   methods: {

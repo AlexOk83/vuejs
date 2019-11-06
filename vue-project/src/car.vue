@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     changeName() {
-      this.carName = 'Mazda'
+      this.carName = 'Mazda';
       this.$emit('nameChanged', this.carName)
     },
     updateCounter() {
