@@ -1,44 +1,34 @@
 <template>
   <div id="app">
-      <h1 v-colored:background="'green'" v-colored:color="'white'" v-if="visible">Parent: {{ carName }}</h1>
-      <h1 v-colored:color="'green'" v-if="visible">Parent: {{ carName }}</h1>
-      <button @click="visible = !visible">toggle</button>
+      <h2>{{ title }}</h2>
+      <h2>{{ title | lowercase }}</h2>
 
-      <app-car
-        :carName="carName"
-        :carYear="carYear"
-        :changeFunc="changeNameToAudi"
-        @nameChanged="carName = $event"
-        @counterUpdated="counter = $event"
-      />
+    <input type="text" v-model="searchName">
 
-      <app-counter
-        :counter="counter"
-      />
+    <ul>
+      <li v-for="name of filteredNames">{{ name }}</li>
+    </ul>
+
+    <app-list></app-list>
   </div>
 </template>
 
 <script>
 
-  import Car from './car'
-  import Counter from './Counter'
+  import ListMixin from './listMixin';
 
 export default {
   data () {
     return {
-      carName: 'Ford',
-      carYear: 2018,
-      visible: true
+      title: 'Hello',
+      names: ['Sergey', 'Alena', 'Ivan']
     }
   },
-  methods: {
-    changeNameToAudi() {
-      this.carName = 'Audi'
+  mixins: [ListMixin],
+  filters: {
+    lowercase(value) {
+      return value.toLowerCase();
     }
-  },
-  components: {
-    appCar: Car,
-    appCounter: Counter
   }
 }
 </script>
