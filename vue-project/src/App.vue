@@ -1,95 +1,127 @@
 <template>
-  <div id="app">
-    <input type="text" v-model.lazy="name">
-    <input type="text" v-model.number="age">
-    <p>{{ name }}</p>
-    <textarea v-model="textarea">
+  <div id="app" class="container">
+    <form class="pt-3" @submit="onSubmit" autocomplete="off">
 
-    </textarea>
-    <p>{{ textarea }}</p>
+      <div class="form-group">
+        <label for="email">email</label>
+        <input
+          type="email"
+          id="email"
+          class="form-control"
+          :class="{
+            'is-invalid': $v.email.$error,
+            'is-valid': $v.email.$dirty && !$v.email.$error
+          }"
+          @blur="$v.email.$touch()"
+          v-model="email"
+        />
+        <div class="invalid-feedback" v-if="!$v.email.required">this field is required</div>
+        <div class="invalid-feedback" v-if="!$v.email.email">email is not valid</div>
+        <div class="invalid-feedback" v-if="!$v.email.uniqEmail">email is not unique</div>
+      </div>
 
-    <hr>
+      <div class="form-group">
+        <label for="password">password</label>
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          autocomplete="off"
+          :class="{
+            'is-invalid': $v.password.$error,
+            'is-valid': $v.password.$dirty && !$v.password.$error
+          }"
+          @input="$v.password.$touch()"
+          v-model="password"
+        />
+        <div class="invalid-feedback" v-if="!$v.password.required">this field is required</div>
+        <div class="invalid-feedback" v-if="!$v.password.minLength">
+          min length of password is {{ $v.password.$params.minLength.min }}. Now it is {{ password.length }}.
+        </div>
 
-    <label>
-      <input type="checkbox" value="instagram" v-model="social"> instagram
-    </label>
+      </div>
 
-    <label>
-      <input type="checkbox" value="vk" v-model="social"> vk
-    </label>
+      <div class="form-group">
+        <label for="password2">confirm password</label>
+        <input
+          type="password"
+          id="password2"
+          class="form-control"
+          autocomplete="off"
+          :class="{
+            'is-invalid': $v.password2.$error,
+            'is-valid': $v.password2.$dirty && !$v.password2.$error
+          }"
+          @input="$v.password2.$touch()"
+          v-model="password2"
+        />
+        <div class="invalid-feedback" v-if="!$v.password.sameAs">
+          passwords should match.
+        </div>
+      </div>
 
-    <label>
-      <input type="checkbox" value="facebook" v-model="social"> facebook
-    </label>
+      <button
+        class="btn btn-success"
+        type="submit"
+        :disabled="$v.$invalid"
+      >
+        submit
+      </button>
 
-    <ul>
-      <li v-for="s in social">{{ s }}</li>
-    </ul>
-
-    <hr>
-    <h2>radio buttons</h2>
-
-    <label>
-      <input type="radio" value="instagram" v-model="rSocial"> instagram
-    </label>
-
-    <label>
-      <input type="radio" value="vk" v-model="rSocial"> vk
-    </label>
-
-    <label>
-      <input type="radio" value="facebook" v-model="rSocial"> facebook
-    </label>
-
-    <ul>
-      <li>{{ rSocial }}</li>
-    </ul>
-
-    <hr>
-
-    <h2>select</h2>
-    <select v-model="defaultSelect">
-      <option v-for="o in selectList" >{{o}}</option>
-    </select>
+    </form>
   </div>
 </template>
 
 <script>
 
+  import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+  const minL = 8;
+  const emails = [
+    'test@test.ru',
+  ];
+  export default {
+    data() {
+      return {
+        email: '',
+        password: '',
+        password2: '',
+        minL,
+      }
+    },
+    methods: {
+      onSubmit(event) {
+        event.preventDefault();
+        console.log(event);
+      }
+    },
+    validations: {
+      email: {
+        required,
+        email,
+        uniqEmail: newEmail => {
+          if (newEmail === ''){
+            return true
+          }
+          if (emails.includes(newEmail)) {
+            return false
+          }
+          return true;
+        }
+      },
+      password: {
+        required,
+        minLength: minLength(minL)
+      },
+      password2: {
+        sameAs: sameAs('password')
+      }
+    },
+    components: {
 
-export default {
-  data () {
-    return {
-      name: '',
-      textarea: 'initial text',
-      social: [],
-      rSocial: '',
-      selectList: ['instagram', 'vk', 'facebook'],
-      defaultSelect: '',
-      age: 20
-    }
-  },
-  watch: {
-    age (value) {
-      console.log(value);
     }
   }
-}
 </script>
 
 <style scoped>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-  }
-  textarea {
-    resize: none;
-    width: 100%;
-    min-height: 100px;
-  }
-  p {
-    white-space: pre;
-  }
+
 </style>
