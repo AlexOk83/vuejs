@@ -111,7 +111,7 @@
       }
     },
     created () {
-      this.resource = this.$resource('http://localhost:3000/cars{/id}')
+      this.resource = this.$resource('cars{/id}')
       this.loadCars();
     }
   }
