@@ -33,7 +33,11 @@
     methods: {
       goBackToCars() {
         this.$router.push('/cars')
-      }
+      },
+    },
+    beforeRouteLeave (to, fromR, next) {
+      console.log('beforeRouteLeave');
+      next();
     }
 
   }

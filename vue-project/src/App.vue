@@ -18,7 +18,6 @@
         email: '',
         password: '',
         password2: '',
-        minL,
       }
     },
     components: {

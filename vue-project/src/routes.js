@@ -1,10 +1,24 @@
 import VueRouter from 'vue-router'
-import Cars from './pages/Cars'
-import Car from './pages/Car'
 import CarFull from './pages/CarFull'
 import ErrorComponent from './pages/Error'
 import Home from './pages/Home'
 
+
+const Cars = resolve => {
+  require.ensure(['./pages/Cars.vue'], () => {
+    resolve(
+      require('./pages/Cars.vue')
+    )
+  })
+}
+
+const Car = resolve => {
+  require.ensure(['./pages/Car.vue'], () => {
+    resolve(
+      require('./pages/Car.vue')
+    )
+  })
+}
 
 export default new VueRouter({
   routes: [
@@ -23,7 +37,11 @@ export default new VueRouter({
         {
           path: 'full',
           component: CarFull,
-          name: 'carFull'
+          name: 'carFull',
+          beforeEnter(to, from, next) {
+            console.log('beforeEnter')
+            next()
+          }
         },
       ]
     },
